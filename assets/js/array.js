@@ -1,65 +1,91 @@
 console.log("--- ЗАВДАННЯ 1 ---");
 class User {
-    constructor(id, firstName, lastName, address) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-    }
+  constructor(id, firstName, lastName, address) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.address = address;
+  }
 }
 
 class Book {
-    constructor(author, title, year, totalPages, shelfNumber) {
-        this.author = author;
-        this.title = title;
-        this.year = year;
-        this.totalPages = totalPages;
-        this.shelfNumber = shelfNumber;
-        this.borrowerId = null;
-    }
+  constructor(author, title, year, totalPages, shelfNumber) {
+    this.author = author;
+    this.title = title;
+    this.year = year;
+    this.totalPages = totalPages;
+    this.shelfNumber = shelfNumber;
+    this.borrowerId = null;
+  }
 
-    isVacant() {
-        
-        return this.shelfNumber !== null;
-    }
+  isVacant() {
+    return this.shelfNumber !== null;
+  }
 
-
-    getRent(userId) {
-       
-        if (this.isVacant()) {
-            
-            this.shelfNumber = null;  
-            this.borrowerId = userId; 
-            console.log(`Успіх: Книгу "${this.title}" видано юзеру з ID ${userId}.`);
-        } else {
-          
-            console.log(`Помилка: Книга "${this.title}" зараз зайнята (у юзера ID ${this.borrowerId}).`);
-        }
+  getRent(userId) {
+    if (this.isVacant()) {
+      this.shelfNumber = null;
+      this.borrowerId = userId;
+      console.log(`Успіх: Книгу "${this.title}" видано юзеру з ID ${userId}.`);
+    } else {
+      console.log(
+        `Помилка: Книга "${this.title}" зараз зайнята (у юзера ID ${this.borrowerId}).`
+      );
     }
+  }
 }
-
-
-
 
 const user1 = new User(10, "Олена", "Коваленко", "Київ, вул. Франка 5");
 const user2 = new User(25, "Андрій", "Шевченко", "Львів, пл. Ринок 1");
 
+console.log("--- ЗАВДАННЯ 2 ---");
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
 
-const harryPotter = new Book("J.K. Rowling", "Harry Potter", 1997, 300, 7);
+  hunting() {
+    console.log(`${this.name} (Animal): Зараз дожену здобич!`);
+  }
 
-console.log("--- КРОК 1: Перевірка нової книги ---");
-console.log("Чи вільна книга?", harryPotter.isVacant()); 
-console.log("Полиця:", harryPotter.shelfNumber);         
-console.log("ID читача:", harryPotter.borrowerId);       
+  growl() {
+    console.log(`${this.name} (Animal): Гррррр!`);
+  }
+}
 
-console.log("\n--- КРОК 2: Олена (ID 10) бере книгу ---");
-harryPotter.getRent(user1.id); 
+class Tiger extends Animal {
+  hunting() {
+    console.log(
+      `${this.name} (Tiger): Я підкрадаюся тихо і роблю смертельний стрибок!`
+    );
+  }
+  growl() {
+    console.log(`${this.name} (Tiger): РРР-МЯУ! Тигр з'їсть тебе!`);
+  }
+}
+class Wolf extends Animal {
+  hunting() {
+    console.log(`${this.name} (Wolf): Ми зграєю заганяємо оленя!`);
+  }
 
+  growl() {
+    console.log(`${this.name} (Wolf): Аууууу! (Виття на місяць)`);
+  }
+}
 
-console.log("Стан книги після видачі:");
-console.log("Чи вільна?", harryPotter.isVacant());       
-console.log("Полиця:", harryPotter.shelfNumber);         
-console.log("ID читача:", harryPotter.borrowerId);      
+const tiger1 = new Tiger("Шерхан");
+const wolf1 = new Wolf("Ракша");
 
-console.log("\n--- КРОК 3: Андрій (ID 25) намагається взяти ту ж книгу ---");
-harryPotter.getRent(user2.id); 
+const genericAnimal = new Animal("Невідома істота");
+
+console.log("--- Тест Тигра ---");
+tiger1.hunting();
+tiger1.growl();
+
+console.log("\n--- Тест Вовка ---");
+wolf1.hunting();
+wolf1.growl();
+
+console.log("\n--- Тест Батьківського класу ---");
+genericAnimal.hunting();
+genericAnimal.growl();
