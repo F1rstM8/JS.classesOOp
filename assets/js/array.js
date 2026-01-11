@@ -1,4 +1,4 @@
-
+console.log("--- ЗАВДАННЯ 1 ---");
 class User {
     constructor(id, firstName, lastName, address) {
         this.id = id;
