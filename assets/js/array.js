@@ -1,6 +1,13 @@
-console.log("--- ЗАВДАННЯ 1 ---");
+//забув вітку другого завдання запушити гітхаб ;)
+
+console.log("--- ЗАВДАННЯ 1  ---");
+
 class User {
   constructor(id, firstName, lastName, address) {
+    if (!id || !firstName || !lastName || !address) {
+      throw new Error("User: Неможливо створити користувача. Всі поля (id, ім'я, прізвище, адреса) обов'язкові!");
+    }
+
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -10,6 +17,10 @@ class User {
 
 class Book {
   constructor(author, title, year, totalPages, shelfNumber) {
+    if (!author || !title || !year || !totalPages || !shelfNumber) {
+      throw new Error(" Неможливо додати книгу. Не всі дані вказані.");
+    }
+
     this.author = author;
     this.title = title;
     this.year = year;
@@ -23,69 +34,97 @@ class Book {
   }
 
   getRent(userId) {
-    if (this.isVacant()) {
-      this.shelfNumber = null;
-      this.borrowerId = userId;
-      console.log(`Успіх: Книгу "${this.title}" видано юзеру з ID ${userId}.`);
-    } else {
-      console.log(
-        `Помилка: Книга "${this.title}" зараз зайнята (у юзера ID ${this.borrowerId}).`
-      );
+  
+    if (!userId) {
+        throw new Error(" Для видачі книги потрібно вказати ID користувача.");
     }
+
+   
+    if (!this.isVacant()) {
+      throw new Error(`Книга "${this.title}" вже видана (у юзера ID ${this.borrowerId}).`);
+    }
+
+
+    this.shelfNumber = null;
+    this.borrowerId = userId;
   }
 }
 
-const user1 = new User(10, "Олена", "Коваленко", "Київ, вул. Франка 5");
-const user2 = new User(25, "Андрій", "Шевченко", "Львів, пл. Ринок 1");
+
+
+try {
+
+    const user1 = new User(10, "Олена", "Коваленко", "Київ, вул. Франка 5");
+    const book1 = new Book("T. Shevchenko", "Kobzar", 1840, 115, 1);
+
+    console.log("Спроба взяти книгу:");
+    book1.getRent(user1.id);
+    console.log("Успіх! Книгу видано."); 
+
+
+    console.log("\nСпроба взяти зайняту книгу:");
+    book1.getRent(25); 
+
+} catch (error) {
+    
+    console.error("СТАЛАСЯ ПОМИЛКА:", error.message);
+}
+
+console.log("\n--- Тест валідації (некоректний юзер) ---");
+try {
+    const badUser = new User(); 
+} catch (error) {
+    console.error("СТАЛАСЯ ПОМИЛКА:", error.message);
+}
 
 console.log("--- ЗАВДАННЯ 2 ---");
+
+
 class Animal {
-  constructor(name) {
-    this.name = name;
-  }
+    constructor(name) {
+        if (!name) throw new Error("Animal: Тварина повинна мати ім'я!");
+        this.name = name;
+    }
 
-  hunting() {
-    console.log(`${this.name} (Animal): Зараз дожену здобич!`);
-  }
+    hunting() {
+        console.log(`${this.name} (Animal): Доганяю здобич!`);
+    }
 
-  growl() {
-    console.log(`${this.name} (Animal): Гррррр!`);
-  }
+    growl() {
+        console.log(`${this.name} (Animal): Грррр!`);
+    }
 }
 
 class Tiger extends Animal {
-  hunting() {
-    console.log(
-      `${this.name} (Tiger): Я підкрадаюся тихо і роблю смертельний стрибок!`
-    );
-  }
-  growl() {
-    console.log(`${this.name} (Tiger): РРР-МЯУ! Тигр з'їсть тебе!`);
-  }
+    hunting() {
+        console.log(`${this.name} (Tiger): Тихе підкрадання і стрибок!`);
+    }
+    growl() {
+        console.log(`${this.name} (Tiger): РРР-МЯУ!`);
+    }
 }
+
 class Wolf extends Animal {
-  hunting() {
-    console.log(`${this.name} (Wolf): Ми зграєю заганяємо оленя!`);
-  }
-
-  growl() {
-    console.log(`${this.name} (Wolf): Аууууу! (Виття на місяць)`);
-  }
+    hunting() {
+        console.log(`${this.name} (Wolf): Біжу на полювання!`);
+    }
+    growl() {
+        console.log(`${this.name} (Wolf): Аууууу!`);
+    }
 }
+try {
+    const tiger = new Tiger("Шерхан");
+    const wolf = new Wolf("Ракша");
+    const unknown = new Animal("Чупакабра");
 
-const tiger1 = new Tiger("Шерхан");
-const wolf1 = new Wolf("Ракша");
+    tiger.hunting();
+    tiger.growl();
+    
+    wolf.hunting();
+    wolf.growl();
 
-const genericAnimal = new Animal("Невідома істота");
+    unknown.hunting();
 
-console.log("--- Тест Тигра ---");
-tiger1.hunting();
-tiger1.growl();
-
-console.log("\n--- Тест Вовка ---");
-wolf1.hunting();
-wolf1.growl();
-
-console.log("\n--- Тест Батьківського класу ---");
-genericAnimal.hunting();
-genericAnimal.growl();
+} catch (e) {
+    console.error("ПОМИЛКА (Task 2):", e.message);
+}
