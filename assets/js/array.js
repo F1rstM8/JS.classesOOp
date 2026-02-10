@@ -1,3 +1,5 @@
+console.log(`---Exercice2---`);
+
 class Animal {
   constructor(name) {
     if (new.target === Animal) {
