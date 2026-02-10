@@ -60,7 +60,8 @@ class Animal {
   }
   hunting() {
     console.log(`${this.name}: Зараз дожену здобич...`);
- growl() {
+  }
+  growl() {
     console.log(`${this.name}: Гррррр!`);
   }
 }
