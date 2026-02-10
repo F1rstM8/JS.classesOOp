@@ -1,21 +1,7 @@
-console.log("=== ЗАВДАННЯ 1: ===");
-
+console.log(`--Exercice 1--`);
 class User {
-  static idCounter = 1;
-
-  constructor(firstName, lastName, address) {
-    if (typeof firstName !== "string" || firstName.trim().length === 0) {
-      throw new Error("User Error: Ім'я має бути непорожнім рядком.");
-    }
-    if (typeof lastName !== "string" || lastName.trim().length === 0) {
-      throw new Error("User Error: Прізвище має бути непорожнім рядком.");
-    }
-    if (typeof address !== "string" || address.trim().length === 0) {
-      throw new Error("User Error: Адреса має бути непорожнім рядком.");
-    }
-
-    this.id = User.idCounter++;
-
+  constructor(id, firstName, lastName, address) {
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.address = address;
@@ -23,79 +9,48 @@ class User {
 }
 
 class Book {
-  constructor(author, title, year, totalPages, shelfNumber) {
-    if (typeof author !== "string" || author.trim().length === 0) {
-      throw new Error("Book Error: Автор має бути рядком.");
-    }
-    if (typeof title !== "string" || title.trim().length === 0) {
-      throw new Error("Book Error: Назва має бути рядком.");
-    }
-
-    if (
-      typeof year !== "number" ||
-      year < 0 ||
-      year > new Date().getFullYear()
-    ) {
-      throw new Error(
-        `Book Error: Рік видання має бути коректним числом (до ${new Date().getFullYear()}).`
-      );
-    }
-    if (typeof totalPages !== "number" || totalPages <= 0) {
-      throw new Error("Book Error: Кількість сторінок має бути більше 0.");
-    }
-    if (typeof shelfNumber !== "number") {
-      throw new Error("Book Error: Номер полиці має бути числом.");
-    }
-
+  constructor(author, title, year, pages, shelfNumber) {
     this.author = author;
     this.title = title;
     this.year = year;
-    this.totalPages = totalPages;
+    this.pages = pages;
+
     this.shelfNumber = shelfNumber;
-    this.borrowerId = null;
+    this.userId = null;
   }
 
   isVacant() {
-    return this.shelfNumber !== null;
+    return this.shelfNumber !== null && this.userId === null;
   }
 
   getRent(userId) {
-    if (typeof userId !== "number") {
-      throw new Error("Book Error: ID користувача має бути числом.");
-    }
-
-    if (!this.isVacant()) {
-      throw new Error(
-        `Book Error: Книга "${this.title}" вже видана (у юзера ID ${this.borrowerId}).`
+    if (this.isVacant()) {
+      this.shelfNumber = null;
+      this.userId = userId;
+      console.log(
+        `Успіх: Книгу "${this.title}" видано користувачу з ID ${userId}.`,
       );
+    } else {
+      console.log(`Помилка: Книга "${this.title}" наразі недоступна.`);
     }
+  }
 
-    this.shelfNumber = null;
-    this.borrowerId = userId;
-    console.log(`Успіх: Книгу "${this.title}" видано юзеру з ID ${userId}.`);
+  returnBook(shelfNumber) {
+    this.userId = null;
+    this.shelfNumber = shelfNumber;
+    console.log(`Книгу "${this.title}" повернуто на полицю №${shelfNumber}.`);
   }
 }
 
-try {
-  const user1 = new User("Олена", "Коваленко", "Київ, вул. Франка 5");
-  const user2 = new User("Андрій", "Шевченко", "Львів, пл. Ринок 1");
+const reader = new User(101, "Тарас", "Шевченко", "Київ, вул. Прорізна, 2");
 
-  console.log(
-    `Створено юзерів: ${user1.firstName} (ID: ${user1.id}), ${user2.firstName} (ID: ${user2.id})`
-  );
+const myBook = new Book("Джордж Орвелл", "1984", 1949, 328, 5);
 
-  const book1 = new Book("T. Shevchenko", "Kobzar", 1840, 115, 1);
+console.log(`Чи доступна книга? -> ${myBook.isVacant()}`);
 
-  console.log("Спроба взяти книгу:");
-  book1.getRent(user1.id);
-} catch (error) {
-  console.error("СТАЛАСЯ ПОМИЛКА:", error.message);
-}
+myBook.getRent(reader.id);
 
-try {
-  console.log("\n--- Тест валідації (некоректний рік) ---");
-  const badBook = new Book("Auth", "Title", -500, 100, 1);
-} catch (error) {
-  console.error("ВАЛІДАЦІЯ СПРАЦЮВАЛА:", error.message);
-}
+console.log(`Чи доступна книга? -> ${myBook.isVacant()}`);
+console.log(myBook);
 
+myBook.getRent(999);
