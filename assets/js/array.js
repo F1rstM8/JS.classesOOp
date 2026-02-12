@@ -1,4 +1,10 @@
 console.log(`--Exercice1--`);
+function errorType(value) {
+  if (typeof value !== "string" || !value.trim().length) {
+    throw new TypeError("Помилка: Значення має бути непорожнім рядком.");
+  }
+}
+
 class User {
   #id;
   #firstName;
@@ -26,9 +32,7 @@ class User {
     return this.#firstName;
   }
   set firstName(value) {
-    if (typeof value !== "string" || value.trim().length === 0) {
-      throw new TypeError("Помилка: Ім'я має бути непорожнім рядком.");
-    }
+    errorType(value);
     this.#firstName = value.trim();
   }
   get lastName() {
@@ -36,9 +40,7 @@ class User {
   }
 
   set lastName(value) {
-    if (typeof value !== "string" || value.trim().length === 0) {
-      throw new TypeError("Помилка: Прізвище має бути непорожнім рядком.");
-    }
+    errorType(value);
     this.#lastName = value.trim();
   }
   get address() {
@@ -46,9 +48,7 @@ class User {
   }
 
   set address(value) {
-    if (typeof value !== "string" || value.trim().length === 0) {
-      throw new TypeError("Помилка: Адреса має бути непорожнім рядком.");
-    }
+    errorType(value);
     this.#address = value.trim();
   }
 }
@@ -73,16 +73,14 @@ class Book {
     return this.#author;
   }
   set author(value) {
-    if (typeof value !== "string" || value.trim().length === 0)
-      throw new TypeError("Автор має бути рядком.");
+    errorType(value);
     this.#author = value.trim();
   }
   get title() {
     return this.#title;
   }
   set title(value) {
-    if (typeof value !== "string" || value.trim().length === 0)
-      throw new TypeError("Назва має бути рядком.");
+    errorType(value);
     this.#title = value.trim();
   }
   get year() {
